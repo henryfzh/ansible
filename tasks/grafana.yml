@@ -27,6 +27,12 @@
       apt:
         update_cache: true
 
+    - name: Ensure package database is consistent
+      shell: sudo dpkg --configure -a
+      args:
+        warn: false
+      become: true
+      
     - name: Install Grafana
       apt:
         name: grafana
@@ -49,10 +55,10 @@
         system: true
         state: present
         create_home: false
-        
+
     - name: Download Node Exporter
       shell: |
-        wget https://github.com/prometheus/node_exporter/releases/download/v1.6.0/node_exporter-1.6.0.linux-{{ ansible_architecture }}.tar.gz -O /tmp/node_exporter.tar.gz
+        wget https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz -O /tmp/node_exporter.tar.gz
         tar xvf /tmp/node_exporter.tar.gz -C /tmp
         mv /tmp/node_exporter-*/node_exporter /usr/local/bin/
       args:
@@ -95,7 +101,7 @@
 
     - name: Download Prometheus
       shell: |
-        wget https://github.com/prometheus/prometheus/releases/download/v2.47.0/prometheus-2.47.0.linux-{{ ansible_architecture }}.tar.gz -O /tmp/prometheus.tar.gz
+        wget https://github.com/prometheus/prometheus/releases/download/v3.0.1/prometheus-3.0.1.linux-amd64.tar.gz -O /tmp/prometheus.tar.gz
         tar xvf /tmp/prometheus.tar.gz -C /tmp
         mv /tmp/prometheus-*/{prometheus,promtool} /usr/local/bin/
         mv /tmp/prometheus-*/{consoles,console_libraries,prometheus.yml} /etc/prometheus/
