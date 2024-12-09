@@ -1,12 +1,21 @@
 # Ansible Script for Ubuntu
 
-## Run
-    - To verify the playbook without making changes, use the --check option
-    ```
-    ansible-playbook -i inventory.yml main.yml --ask-become-pass --check
-    ```
+## How to Run
 
-    - Run
-    ```
-    ansible-playbook -i inventory.yml main.yml --ask-become-pass
-    ```
+### Verify the Playbook Without Making Changes
+To simulate the playbook execution without applying changes, use the `--check` option:
+
+```bash
+ansible-playbook -i inventory.yml main.yml --ask-become-pass --check
+```
+
+### Run the Playbook
+To execute the playbook and apply the changes, run:
+
+```bash
+ansible-playbook -i inventory.yml main.yml --ask-become-pass
+```
+
+---
+
+Test
