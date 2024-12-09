@@ -1,0 +1,10 @@
+---
+- name: Configure Ubuntu Server
+  hosts: all
+  become: true
+  tasks:
+    - import_tasks: tasks/add_user.yml
+    - import_tasks: tasks/install_vim.yml
+    - import_tasks: tasks/install_tmux.yml
+    - import_tasks: tasks/install_neovim.yml
+    - import_tasks: tasks/install_tools.yml

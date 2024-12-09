@@ -1,0 +1,27 @@
+---
+- name: Add user henryfzh
+  user:
+    name: henryfzh
+    state: present
+    shell: /bin/bash
+    create_home: true
+
+- name: Create .ssh directory for henryfzh
+  file:
+    path: /home/henryfzh/.ssh
+    state: directory
+    owner: henryfzh
+    group: henryfzh
+    mode: '0700'
+
+- name: Add SSH keys for henryfzh
+  copy:
+    content: |
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJDA6EZ0APs+Rp5vYt+4tJwZ3mzv+P6qy9EVleWHh0mg shimahh@sslaptop
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILg1MPY3FeClAgQmU+VtfMuTFpdQIJ+j/fnWCCul1VGq frieren
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDQPfyjbFvHVZxZ3PB0nN/UXhKgdSoAkdHPzJ4PTHWDA bocchi
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOf3CU8dldm/lGhaevTqTY5QZ0UYDCweBCqbYMUAI4oh fern
+    dest: /home/henryfzh/.ssh/authorized_keys
+    owner: henryfzh
+    group: henryfzh
+    mode: '0600'
