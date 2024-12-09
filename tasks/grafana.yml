@@ -29,10 +29,8 @@
 
     - name: Ensure package database is consistent
       shell: sudo dpkg --configure -a
-      args:
-        warn: false
       become: true
-      
+
     - name: Install Grafana
       apt:
         name: grafana
