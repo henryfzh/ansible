@@ -1,0 +1,154 @@
+---
+- name: Install Grafana
+  block:
+    - name: Install prerequisites for Grafana
+      apt:
+        name:
+          - apt-transport-https
+          - software-properties-common
+          - wget
+        state: present
+
+    - name: Add Grafana GPG key
+      shell: |
+        wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | tee /etc/apt/keyrings/grafana.gpg > /dev/null
+      args:
+        creates: /etc/apt/keyrings/grafana.gpg
+
+    - name: Add Grafana APT repository
+      copy:
+        content: "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main\n"
+        dest: /etc/apt/sources.list.d/grafana.list
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Update APT cache
+      apt:
+        update_cache: true
+
+    - name: Install Grafana
+      apt:
+        name: grafana
+        state: present
+
+    - name: Enable and start Grafana service
+      systemd:
+        name: grafana-server
+        enabled: true
+        state: started
+  tags:
+    - grafana
+
+- name: Install Node Exporter
+  block:
+    - name: Create user for Node Exporter
+      user:
+        name: node_exporter
+        shell: /usr/sbin/nologin
+        system: true
+        state: present
+        create_home: false
+        
+    - name: Download Node Exporter
+      shell: |
+        wget https://github.com/prometheus/node_exporter/releases/download/v1.6.0/node_exporter-1.6.0.linux-{{ ansible_architecture }}.tar.gz -O /tmp/node_exporter.tar.gz
+        tar xvf /tmp/node_exporter.tar.gz -C /tmp
+        mv /tmp/node_exporter-*/node_exporter /usr/local/bin/
+      args:
+        creates: /usr/local/bin/node_exporter
+
+    - name: Create Node Exporter systemd service
+      copy:
+        content: |
+          [Unit]
+          Description=Node Exporter
+          After=network.target
+
+          [Service]
+          User=node_exporter
+          ExecStart=/usr/local/bin/node_exporter
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+        dest: /etc/systemd/system/node_exporter.service
+        mode: '0644'
+
+    - name: Enable and start Node Exporter
+      systemd:
+        name: node_exporter
+        enabled: true
+        state: started
+  tags:
+    - node_exporter
+
+- name: Install Prometheus
+  block:
+    - name: Create user for Prometheus
+      user:
+        name: prometheus
+        shell: /usr/sbin/nologin
+        system: true
+        state: present
+        create_home: false
+
+    - name: Download Prometheus
+      shell: |
+        wget https://github.com/prometheus/prometheus/releases/download/v2.47.0/prometheus-2.47.0.linux-{{ ansible_architecture }}.tar.gz -O /tmp/prometheus.tar.gz
+        tar xvf /tmp/prometheus.tar.gz -C /tmp
+        mv /tmp/prometheus-*/{prometheus,promtool} /usr/local/bin/
+        mv /tmp/prometheus-*/{consoles,console_libraries,prometheus.yml} /etc/prometheus/
+      args:
+        creates: /usr/local/bin/prometheus
+
+    - name: Create Prometheus configuration file
+      copy:
+        content: |
+          global:
+            scrape_interval: 15s
+
+          scrape_configs:
+          - job_name: node
+            static_configs:
+            - targets: ['localhost:9100']
+        dest: /etc/prometheus/prometheus.yml
+        owner: prometheus
+        group: prometheus
+        mode: '0644'
+
+    - name: Create Prometheus systemd service
+      copy:
+        content: |
+          [Unit]
+          Description=Prometheus
+          After=network.target
+
+          [Service]
+          User=prometheus
+          ExecStart=/usr/local/bin/prometheus \
+            --config.file=/etc/prometheus/prometheus.yml \
+            --storage.tsdb.path=/var/lib/prometheus \
+            --web.console.templates=/etc/prometheus/consoles \
+            --web.console.libraries=/etc/prometheus/console_libraries
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+        dest: /etc/systemd/system/prometheus.service
+        mode: '0644'
+
+    - name: Create Prometheus data directory
+      file:
+        path: /var/lib/prometheus
+        state: directory
+        owner: prometheus
+        group: prometheus
+
+    - name: Enable and start Prometheus
+      systemd:
+        name: prometheus
+        enabled: true
+        state: started
+  tags:
+    - prometheus

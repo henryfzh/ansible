@@ -16,6 +16,11 @@ To execute the playbook and apply the changes, run:
 ansible-playbook -i inventory.yml main.yml --ask-become-pass
 ```
 
+### Run the Playbook with specific task
+```bash
+ansible-playbook -i inventory.yml main.yml --tags "grafana,nvim" --ask-become-pass
+```
+
 ---
 
 Test
