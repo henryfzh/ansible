@@ -3,8 +3,8 @@
   hosts: all
   become: true
   tasks:
-    - import_tasks: tasks/add_user.yml
-    - import_tasks: tasks/install_vim.yml
-    - import_tasks: tasks/install_tmux.yml
-    - import_tasks: tasks/install_neovim.yml
-    - import_tasks: tasks/install_tools.yml
+    - import_tasks: tasks/user.yml
+    - import_tasks: tasks/packages.yml
+    - import_tasks: tasks/node_exporter.yml
+    - import_tasks: tasks/prometheus.yml
+    - import_tasks: tasks/config.yml

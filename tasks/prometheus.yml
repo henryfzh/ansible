@@ -1,0 +1,58 @@
+---
+- name: Download Prometheus
+  shell: |
+    wget https://github.com/prometheus/prometheus/releases/download/v2.47.0/prometheus-2.47.0.linux-{{ ansible_architecture }}.tar.gz -O /tmp/prometheus.tar.gz
+    tar xvf /tmp/prometheus.tar.gz -C /tmp
+    mv /tmp/prometheus-*/{prometheus,promtool} /usr/local/bin/
+    mv /tmp/prometheus-*/{consoles,console_libraries,prometheus.yml} /etc/prometheus/
+  args:
+    creates: /usr/local/bin/prometheus
+
+- name: Create Prometheus configuration file
+  copy:
+    content: |
+      global:
+        scrape_interval: 15s
+
+      scrape_configs:
+      - job_name: node
+        static_configs:
+        - targets: ['localhost:9100']
+    dest: /etc/prometheus/prometheus.yml
+    owner: prometheus
+    group: prometheus
+    mode: '0644'
+
+- name: Create Prometheus systemd service
+  copy:
+    content: |
+      [Unit]
+      Description=Prometheus
+      After=network.target
+
+      [Service]
+      User=prometheus
+      ExecStart=/usr/local/bin/prometheus \
+        --config.file=/etc/prometheus/prometheus.yml \
+        --storage.tsdb.path=/var/lib/prometheus \
+        --web.console.templates=/etc/prometheus/consoles \
+        --web.console.libraries=/etc/prometheus/console_libraries
+      Restart=always
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/prometheus.service
+    mode: '0644'
+
+- name: Create Prometheus data directory
+  file:
+    path: /var/lib/prometheus
+    state: directory
+    owner: prometheus
+    group: prometheus
+
+- name: Enable and start Prometheus
+  systemd:
+    name: prometheus
+    enabled: true
+    state: started

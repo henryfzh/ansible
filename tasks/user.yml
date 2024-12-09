@@ -25,3 +25,19 @@
     owner: henryfzh
     group: henryfzh
     mode: '0600'
+    
+- name: Create user for Prometheus
+  user:
+    name: prometheus
+    shell: /usr/sbin/nologin
+    system: true
+    state: present
+    create_home: false
+
+- name: Create user for Node Exporter
+  user:
+    name: node_exporter
+    shell: /usr/sbin/nologin
+    system: true
+    state: present
+    create_home: false

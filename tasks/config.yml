@@ -1,0 +1,45 @@
+---
+- name: Clone the configuration repository
+  git:
+    repo: https://github.com/Henryfzh/linux-setting.git
+    dest: /tmp/linux-setting
+    version: main  
+
+- name: Move Neovim configuration to ~/.config/nvim
+  copy:
+    src: /tmp/linux-setting/nvim/
+    dest: ~/.config/nvim/
+    remote_src: yes
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Clone lazy.nvim repository if not installed
+  git:
+    repo: https://github.com/folke/lazy.nvim.git
+    dest: ~/.local/share/nvim/lazy/lazy.nvim
+    version: stable
+      
+- name: Install TPM for tmux
+  git:
+    repo: https://github.com/tmux-plugins/tpm 
+    dest: ~/.tmux/plugins/tpm
+    version: master
+
+- name: Move Tmux configuration to ~/.tmux
+  copy:
+    src: /tmp/linux-setting/tmux/
+    dest: ~/.tmux/
+    remote_src: yes
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Move .tmux.conf to home directory
+  copy:
+    src: /tmp/linux-setting/.tmux.conf
+    dest: ~/.tmux.conf
+    remote_src: yes
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'
