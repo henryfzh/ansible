@@ -25,8 +25,8 @@
         src: /tmp/linux-setting/nvim/
         dest: ~/.config/nvim/
         remote_src: yes
-        owner: "{{ ansible_user }}"
-        group: "{{ ansible_user }}"
+        owner: "{{ ansible_user_id  }}"
+        group: "{{ ansible_user_id  }}"
         mode: '0755'
 
     - name: Clone lazy.nvim repository if not installed
@@ -50,8 +50,8 @@
         src: /tmp/linux-setting/tmux/
         dest: ~/.tmux/
         remote_src: yes
-        owner: "{{ ansible_user }}"
-        group: "{{ ansible_user }}"
+        owner: "{{ ansible_user_id  }}"
+        group: "{{ ansible_user_id  }}"
         mode: '0755'
 
     - name: Move .tmux.conf to home directory
@@ -59,8 +59,8 @@
         src: /tmp/linux-setting/.tmux.conf
         dest: ~/.tmux.conf
         remote_src: yes
-        owner: "{{ ansible_user }}"
-        group: "{{ ansible_user }}"
+        owner: "{{ ansible_user_id  }}"
+        group: "{{ ansible_user_id  }}"
         mode: '0644'
   tags:
     - tmux
