@@ -9,6 +9,7 @@
       - npm
       - openssh-server  
       - software-properties-common
+      - xclip
     state: present
     update_cache: true
 
