@@ -1,40 +1,38 @@
 ---
 - name: Install Miniconda
   block:
-    become: true
-    tasks:
-      - name: Ensure Miniconda3 directory exists
-        ansible.builtin.file:
-          path: "{{ ansible_user_dir }}/miniconda3"
-          state: directory
-          mode: '0755'
+    - name: Ensure Miniconda3 directory exists
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/miniconda3"
+        state: directory
+        mode: '0755'
 
-      - name: Download Miniconda installer
-        ansible.builtin.get_url:
-          url: "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
-          dest: "{{ ansible_user_dir }}/miniconda3/miniconda.sh"
-          mode: '0755'
+    - name: Download Miniconda installer
+      ansible.builtin.get_url:
+        url: "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+        dest: "{{ ansible_user_dir }}/miniconda3/miniconda.sh"
+        mode: '0755'
 
-      - name: Install Miniconda silently
-        ansible.builtin.shell: |
-          bash {{ ansible_user_dir }}/miniconda3/miniconda.sh -b -u -p {{ ansible_user_dir }}/miniconda3
-        args:
-          creates: "{{ ansible_user_dir }}/miniconda3/bin/conda"
+    - name: Install Miniconda silently
+      ansible.builtin.shell: |
+        bash {{ ansible_user_dir }}/miniconda3/miniconda.sh -b -u -p {{ ansible_user_dir }}/miniconda3
+      args:
+        creates: "{{ ansible_user_dir }}/miniconda3/bin/conda"
 
-      - name: Remove Miniconda installer
-        ansible.builtin.file:
-          path: "{{ ansible_user_dir }}/miniconda3/miniconda.sh"
-          state: absent
+    - name: Remove Miniconda installer
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/miniconda3/miniconda.sh"
+        state: absent
 
-      - name: Activate Miniconda and initialize conda
-        ansible.builtin.shell: |
-          source {{ ansible_user_dir }}/miniconda3/bin/activate
-          conda init --all
-        args:
-          executable: /bin/bash
+    - name: Activate Miniconda and initialize conda
+      ansible.builtin.shell: |
+        source {{ ansible_user_dir }}/miniconda3/bin/activate
+        conda init --all
+      args:
+        executable: /bin/bash
 
-      - name: Display Miniconda installation path
-        ansible.builtin.debug:
-          msg: "Miniconda installed in {{ ansible_user_dir }}/miniconda3"
-  tag: 
+    - name: Display Miniconda installation path
+      ansible.builtin.debug:
+        msg: "Miniconda installed in {{ ansible_user_dir }}/miniconda3"
+  tags: 
     - miniconda
