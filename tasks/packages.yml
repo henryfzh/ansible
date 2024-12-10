@@ -28,17 +28,3 @@
       - curl
       - doxygen
     state: present
-
-- name: Clone Neovim repository
-  git:
-    repo: https://github.com/neovim/neovim.git
-    dest: /tmp/neovim
-    version: stable
-
-- name: Build and install Neovim
-  shell: |
-    make CMAKE_BUILD_TYPE=Release
-    make install
-  args:
-    chdir: /tmp/neovim
-    creates: /usr/local/bin/nvim
