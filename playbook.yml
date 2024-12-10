@@ -6,6 +6,6 @@
     - import_tasks: tasks/users.yml
     - import_tasks: tasks/packages.yml
 
-    - name: Run all tasks under software
-      include_tasks: "{{ item }}"
-      loop: "{{ lookup('fileglob', 'tasks/software/*.yml') }}"
+    - name: Include Miniconda installation tasks
+      include_tasks: tasks/software/miniconda.yml
+      tags: miniconda
