@@ -30,17 +30,18 @@
   block:
     - name: Clone the configuration repository
       git:
-        repo: https://github.com/Henryfzh/linux-setting.git
-        dest: /tmp/linux-setting
-        version: main  
+        repo: git@github.com:Henryfzh/nvim.git
+        dest: /tmp/nvim-config
+        version: main
+        key_file: ~/.ssh/id_ed25519  # Ensure the SSH key is configured
 
     - name: Move Neovim configuration to ~/.config/nvim
       copy:
-        src: /tmp/linux-setting/nvim/
+        src: /tmp/nvim-config/
         dest: ~/.config/nvim/
         remote_src: yes
-        owner: "{{ ansible_user_id  }}"
-        group: "{{ ansible_user_id  }}"
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_id }}"
         mode: '0755'
 
     - name: Clone lazy.nvim repository if not installed
@@ -50,4 +51,3 @@
         version: stable
   tags:
     - nvim
-
