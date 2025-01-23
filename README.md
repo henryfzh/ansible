@@ -19,7 +19,7 @@ ansible-playbook -i inventory.yml playbook.yml --ask-become-pass --check
 To execute the playbook and apply the changes, run:
 
 ```bash
-ansible-playbook -i inventory.yml playbook.yml --ask-become-pass
+ansible-playbook -i inventory.yml playbook.yml --ask-become-pass -v
 ```
 
 ### Run the Playbook with specific task
