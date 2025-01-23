@@ -6,22 +6,22 @@
         dest: ~/.tmux/plugins/tpm
         version: master
 
-    - name: Move Tmux configuration to ~/.tmux
-      copy:
-        src: /tmp/linux-setting/tmux/
-        dest: ~/.tmux/
-        remote_src: yes
-        owner: "{{ ansible_user_id  }}"
-        group: "{{ ansible_user_id  }}"
-        mode: '0755'
+    # - name: Move Tmux configuration to ~/.tmux
+    #   copy:
+    #     src: /tmp/linux-setting/tmux/
+    #     dest: ~/.tmux/
+    #     remote_src: yes
+    #     owner: "{{ ansible_user_id  }}"
+    #     group: "{{ ansible_user_id  }}"
+    #     mode: '0755'
 
-    - name: Move .tmux.conf to home directory
-      copy:
-        src: /tmp/linux-setting/.tmux.conf
-        dest: ~/.tmux.conf
-        remote_src: yes
-        owner: "{{ ansible_user_id  }}"
-        group: "{{ ansible_user_id  }}"
-        mode: '0644'
+    # - name: Move .tmux.conf to home directory
+    #   copy:
+    #     src: /tmp/linux-setting/.tmux.conf
+    #     dest: ~/.tmux.conf
+    #     remote_src: yes
+    #     owner: "{{ ansible_user_id  }}"
+    #     group: "{{ ansible_user_id  }}"
+    #     mode: '0644'
   tags:
     - tmux
