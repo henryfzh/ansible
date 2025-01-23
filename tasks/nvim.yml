@@ -3,7 +3,6 @@
   git:
     repo: https://github.com/neovim/neovim.git
     dest: /tmp/neovim
-    version: stable
 
 - name: Build and install Neovim
   shell: |
