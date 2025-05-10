@@ -31,19 +31,20 @@
     dest: /tmp/nvim-config
     version: main
 
-    - name: Move Neovim configuration to ~/.config/nvim
-      copy:
-        src: /tmp/nvim-config/
-        dest: ~/.config/nvim/
-        remote_src: yes
-        owner: "{{ ansible_user_id }}"
-        group: "{{ ansible_user_id }}"
-        mode: '0755'
+- name: Move Neovim configuration to ~/.config/nvim
+  copy:
+    src: /tmp/nvim-config/
+    dest: ~/.config/nvim/
+    remote_src: yes
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: '0755'
 
-    - name: Clone lazy.nvim repository if not installed
-      git:
-        repo: https://github.com/folke/lazy.nvim.git
-        dest: ~/.local/share/nvim/lazy/lazy.nvim
-        version: stable
+- name: Clone lazy.nvim repository if not installed
+  git:
+    repo: https://github.com/folke/lazy.nvim.git
+    dest: ~/.local/share/nvim/lazy/lazy.nvim
+    version: stable
+    
   tags:
     - nvim
