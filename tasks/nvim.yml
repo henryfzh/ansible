@@ -25,14 +25,11 @@
   tags:
     - nvim
 
-- name: Configure NeoVim
-  block:
-    - name: Clone the configuration repository
-      git:
-        repo: git@github.com:Henryfzh/nvim.git
-        dest: /tmp/nvim-config
-        version: main
-        key_file: ~/.ssh/id_ed25519  # Ensure the SSH key is configured
+- name: Clone the configuration repository
+  git:
+    repo: https://github.com/Henryfzh/nvim.git
+    dest: /tmp/nvim-config
+    version: main
 
     - name: Move Neovim configuration to ~/.config/nvim
       copy:
